@@ -1,0 +1,198 @@
+package team5.service;
+
+import static team5.util.Utils.*;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import team5.vo.Product;
+
+public class ProductServiceImpl implements ProductService {
+	/**
+	 * @Author 우성준
+	 * 
+	 * @Since 23/02/08
+	 * 
+	 * 상품기능담당클래스
+	 * 
+	 * IOStream 추가, 싱글톤 추가, 메소드 지역변수추가(String writer) 멤버서비스 필요
+	 */
+	private List<Product> products = new ArrayList<Product>();
+	private int proId = 0;
+	ReviewService rs = ReviewServiceImpl.getInstance();
+	MemberService ms = MemberServiceImpl.getInstance(); // 로그인에서 관리자인거 가져오기
+	CartService cs = CartServiceImpl.getInstance();
+
+//	CartServiceImpl cs = new CartServiceImpl();
+
+	private static ProductService productService = new ProductServiceImpl();// 인스턴스 생성, 클래스가 로드 될때 1번 실행// private
+
+	private ProductServiceImpl() {
+	} // 생성자
+
+	// 메소드
+	public static ProductService getInstance() {
+		return productService;
+	}
+
+	{
+		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("product.ser"))) {
+			products = (List<Product>) inputStream.readObject();
+		} catch (FileNotFoundException e) {
+			products.add(new Product(1001, "청바지", "하의", 1, 30000, new Date(), "admin", 11L));
+			products.add(new Product(2002, "티셔츠", "상의", 2, 20000, new Date(), "admin", 0L));
+			products.add(new Product(3003, "귀걸이", "악세", 3, 15000, new Date(), "admin", 0L));
+			save();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+//	상품삭제(전체상품에서)
+	@Override
+	public void remove(String writer) {
+		if (ms.findBy(writer).getUserId().equals("admin") == false) {
+			System.err.println("접근권한이 없습니다");
+			return;
+		}
+		int proId = nextInt("상품코드를 입력하세요 >");
+		products.remove(findBy(proId));
+		save();
+	}
+
+//	상품등록(관리자 일 때만 실행가능)
+	@Override
+	public void register(String writer) {
+//		if (ms.findBy(writer).getUserId().equals("admin") == false) {
+//			System.err.println("접근권한이 없습니다");
+//			return;
+//		}
+		String proName = nextLine("상품명을 입력하세요 >");
+		String category = nextLine("카테고리 설정하세요 >");
+		int proCnt = nextInt("수량을 입력하세요 >");
+		int proPrice = nextInt("가격을 입력하세요 >");
+
+		if (category.equals("하의"))
+			proId += 1000;
+		else if (category.equals("상의"))
+			proId += 2000;
+		else
+			proId += 3000;
+		Product product = new Product(proId++, proName, category, proCnt, proPrice, new Date(), "admin", 0L);
+		products.add(product);
+		save();
+	}
+
+//	상품수정(관리자 일때만 가능)
+	@Override
+	public void modify(String writer) {
+		if (ms.findBy(writer).getUserId().equals("admin") == false) {
+			System.err.println("접근권한이 없습니다");
+			return;
+		}
+		Product p = findBy(nextInt("상품코드를 입력하세요"));
+		if (p == null) {
+			System.out.println("일치하는 상품코드가 없습니다");
+			return;
+		}
+		p.setProName(nextLine("바꾸고 싶은 상품명으로 입력하세요 >"));
+		p.setCategory(nextLine("바꾸고 싶은 카테고리로 입력하세요 >"));
+		p.setProCnt(nextInt("들어온 수량과 합쳐서 입력하세요 >"));
+		p.setProPrice(nextInt("변동될 가격을 입력하세요 >"));
+		p.setRegDate(new Date());
+		p.setRnoCnt(0l);
+		save();
+	}
+
+//  상세정보
+	@Override
+	public void info(int proId) {
+		Product p = findBy(proId);
+		System.out.println("상품명 :" + p.getProName());
+		System.out.println("가격 :" + p.getProPrice());
+//		rs.reviewList(proId);
+
+//		메인에서 다음 화면을 처리해야함
+//		int input = nextInt("1. 담기 2. 뒤로가기 3. 후기등록 4. 후기수정 5. 후기삭제");
+//		switch(input) {
+//			case 1:
+//				cs.addProd(proId);
+//		}
+	}
+	
+
+	// 상품전체 리스트
+	@Override
+	public void list() {
+		System.out.println("상품코드   상품명    카테고리   재고   가격             올린날짜             작성자");
+		System.out.println("=================================================================================");
+		Collection<Product> cup = products;
+		for(Product product : cup) {
+			System.out.println(product);
+		}
+		System.out.println();
+		
+		
+//		메인에서 밑에 기능을 구현해서 상세정보로 넘어가야함
+//		int input = nextInt("상품코드를 입력해서 상세정보를 보시거나 뒤로가기(0)를 눌러주세요");
+//		switch(input/1000) {
+//			case 0:
+//				return;
+//			case 1,2,3:
+//				info(input);
+//		}
+	}
+
+	public Product findBy(int proId) {
+		Product product = null;
+		for (int i = 0; i < products.size(); i++) {
+			if (products.get(i).getProId() == proId) {
+				product = products.get(i);
+				break;
+			}
+		}
+		return product;
+	}
+
+	public void save() {
+		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("product.ser"))) {
+			objectOutputStream.writeObject(products);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void decreaseProCnt(int proId) {
+		cs = CartServiceImpl.getInstance();
+		findBy(proId).setProCnt(findBy(proId).getProCnt()-cs.findByCart(proId).getProCnt());
+		save();
+	}
+	public static void main(String[] args) {
+		ProductServiceImpl impl = new ProductServiceImpl();
+		impl.list();
+//		impl.register("admin");
+//		impl.list();
+//		impl.modify("admin");
+//		impl.list();
+//		impl.remove("admin");
+//		impl.list();
+//		impl.info(1001);
+	}
+}

@@ -1,0 +1,34 @@
+package team5.util;
+
+@SuppressWarnings("serial")
+public class RangeException extends RuntimeException{
+	
+	public RangeException() {	}
+
+	RangeException(int start, int end) {
+		super(start + " 와 " + end + " 사이의 값을 입력하세요.");
+	}
+	
+	
+	
+public class MyRangeException2 extends RuntimeException {
+	
+	public MyRangeException2() { } //생성자 생성
+	
+	MyRangeException2(String limit) {
+		super("영문자로 입력해주세요 (한글X)");
+		
+	}
+	
+	
+public class MyRangeException3 extends RuntimeException {
+	
+	public MyRangeException3() { } //생성자 생성
+	
+	MyRangeException3(String limit) {
+		super("");
+		
+			}
+		}
+	}	
+}

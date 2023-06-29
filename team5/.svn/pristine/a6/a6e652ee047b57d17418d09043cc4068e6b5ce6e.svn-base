@@ -1,0 +1,113 @@
+package team5;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+
+
+/**
+ * @author DG
+ * @since 02/07
+ * UBoardServiceImpl 생성
+ * 
+ * 02/07
+ * write, modify, remove 메소드 생성 아직 미구현
+ * write 메소드 구현
+ * 
+ * 
+ * 02/08
+ * write 메소드 -> ubsRegister로 변경
+ * 날짜 데이터 값을 %s에 표현 방법 해결
+ * 1차 싱글톤 연결 실패(Member 미구현)
+ * 
+ * 02/10
+ * Member에서 로그인정보 싱글톤 객체로 성공
+ */
+public class UBoardServerImpl implements UBoardServer {
+	
+	 
+	private int boardCnt = 1; 										//글 번호 	
+	private List<UBoard> boards = new ArrayList<UBoard>();			//UBoard타입의 글목록을 담을 boards를 생성
+	private MemberService ms = MemberServiceImpl.getInstance();		//Login한 멤버의 주소값 불러오기
+	
+	/**
+	 * 중고거래 게시글 등록 Method
+	 */
+	@Override
+	public void ubsRegister() {
+		ms.login();													//로그인 정보 가져오기
+		String content = Utils.nextLine("상품명을 입력해주세요(예:청바지)");
+		int price = Utils.nextInt("상품의 가격을 입력해주세요(예:30000)");
+		UBoard uBoard = new UBoard(ms.getLoginUser().getUserID(), ms.getLoginUser().getAddr(), boardCnt, content, price, new Date(), false);
+		boards.add(uBoard);
+		boardCnt++;
+
+	}
+
+	/**
+	 * 중고거래 게시글 수정 Method
+	 */
+	@Override
+	public void ubsModify() {
+		String content;
+		int price;
+		int sale;
+		UBoard uBoard = findByBoard(Utils.nextInt("수정(판매여부) 하실 글 번호를 입력해주세요(예:1)"));
+		findByBoard(uBoard.getBoardNo());
+		
+		sale = Utils.nextInt("판매완료는 1, 판매중은 2 번을 입력해주세요");		//판매여부
+		if (sale == 1) {
+			uBoard.setBoardCommit(true);
+		} else if (sale == 2) {
+			uBoard.setBoardCommit(false);
+			content = Utils.nextLine("수정 하실 제품 명을 입력해주세요(예:후드티)");
+			price = Utils.nextInt("수정 하실 가격을 입력해주세요 (예:100000)");
+			uBoard.setboardContent(content);
+			uBoard.setboardPrice(price);
+		}
+	}
+
+
+	
+	/**
+	 * 중고거래 게시글 삭제 Method
+	 */
+	@Override
+	public void ubsRemove() {
+		boards.remove(findByBoard(Utils.nextInt("삭제 하실 글 번호를 입력해주세요(예:1)")));		
+	}
+
+	/**
+	 * 중고거래 게시글 목록 Method
+	 * 
+	 */
+	@Override
+	public void ubsList() {
+		System.out.println("글번호   작성자   물품   가격             올린날짜            판매여부");
+		System.out.println("======================================================================");
+		for (int i = 0; i < boards.size(); i++) {
+			String sale = boards.get(i).isBoardCommit() == true ? "판매완료" : "판매중";
+			System.out.printf("%3d %10s %5s %7d %15s %7s", boards.get(i).getBoardNo(), boards.get(i).getUseId(),
+					boards.get(i).getboardContent(), boards.get(i).getboardPrice(),
+					new SimpleDateFormat("yy/MM/dd HH:mm:ss").format(boards.get(i).getBoardDate()), sale);
+		}
+	}
+	
+	
+	//수정,삭제 할 게시판의 글번호를 입력하면 가져온다
+	UBoard findByBoard(int bNo) {
+
+		UBoard uBoard = null;
+		for (int i = 0; i < boards.size(); i++) {
+			if (boards.get(i).getBoardNo() == bNo) {
+				uBoard = boards.get(i);
+				break;
+			}
+		}
+		return uBoard;
+	}
+
+}

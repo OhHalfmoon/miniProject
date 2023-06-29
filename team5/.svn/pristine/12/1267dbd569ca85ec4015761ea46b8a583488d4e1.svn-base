@@ -1,0 +1,12 @@
+package team5;
+//import team5.Order;
+public interface OrderService {
+//구입한다
+	void buy();
+//취소한다
+	void removeOrder();
+	
+	Order findByOrder(String userID, int proID);
+	
+	void displayOrder();
+}

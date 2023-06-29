@@ -1,0 +1,74 @@
+package team5.vo;
+
+import java.io.Serializable;
+
+public class Order implements Serializable {
+	
+	//주문번호
+		private int orderNum;
+		private String userID;
+		private String proName;
+		private int proId;
+//		private int proCnt;
+		private int proPrice;
+		
+		public Order() {
+			// TODO Auto-generated constructor stub
+		}
+
+		public Order(int orderNum, String userID, String proName, int proId, int proPrice) {
+			super();
+			this.orderNum = orderNum;
+			this.userID = userID;			
+			this.proName = proName;
+			this.proId = proId;
+			this.proPrice = proPrice;
+		}
+
+		public int getOrderNum() {
+			return orderNum;
+		}
+
+		public void setOrderNum(int orderNum) {
+			this.orderNum = orderNum;
+		}
+
+		public String getUserID() {
+			return userID;
+		}
+
+		public void setUserID(String userID) {
+			this.userID = userID;
+		}
+
+		public String getProName() {
+			return proName;
+		}
+
+		public void setProName(String proName) {
+			this.proName = proName;
+		}
+		
+		public int getProId() {
+			return proId;
+		}
+
+		public void setProId(int proId) {
+			this.proId = proId;
+		}
+
+		public int getProPrice() {
+			return proPrice;
+		}
+
+		public void setProPrice(int proPrice) {
+			this.proPrice = proPrice;
+		}
+
+		@Override
+		public String toString() {
+			return "Order [orderNum=" + orderNum + ", userID=" + userID + ", proName=" + proName + ", proId=" + proId
+					+ ", proPrice=" + proPrice + "]";
+		}
+				
+}		

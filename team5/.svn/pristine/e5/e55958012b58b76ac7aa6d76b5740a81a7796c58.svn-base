@@ -1,0 +1,131 @@
+package team5.vo;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+/**
+ * @author DG
+ * @since 23/02/06 19:00  
+ * UBoard VO 생성
+ * 
+ * 
+ * 23/02/07 17:00
+ * 필드 선언 및 getter setter, constructor, toString
+ * 
+ * 23/02/11 00:14
+ * 필드 명 변경 및 ToString메서드 선언
+ * 
+ * 남은 것
+ * toString 가공 할 것 
+ * implements Serializable 추가
+ * 
+ */
+public class UBoard implements Serializable{
+	/*
+	 *		UseId 							
+	 *		UseAddress						 
+	 *		BoardNo 글번호					
+	 *		BoardContent 글 작성				
+	 *		BoardPrice 판매금액				
+	 *		BoardDate 글 작성 시간			
+	 *		BoardCommit 판매완료 여부		
+	 *		
+	 * */
+	
+	//데이터 가공 할 것 
+	@Override
+	public String toString() {
+		String print;
+		print = String.format("%3d %10s %5s %7d %25s %10s", getBoardNo(), getUseId(),getboardContent(),getboardPrice(),	new SimpleDateFormat("yy/MM/dd HH:mm:ss").format(getBoardDate()), isBoardCommit() == true ? "판매완료" : "판매중");
+		return print;
+	}
+
+	private String useId;
+	private String useAddress;
+	private int boardNo;
+	private String boardContent;
+	private int boardPrice;
+	private Date boardDate;
+	private boolean boardCommit;
+	
+	
+
+	public int getboardPrice() {
+		return boardPrice;
+	}
+
+	public void setboardPrice(int boardPrice) {
+		this.boardPrice = boardPrice;
+	}
+
+	public UBoard() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public UBoard(String useId, String useAddress, int boardNo, String boardContent, int boardPrice, Date boardDate,
+			boolean boardCommit) {
+		super();
+		this.useId = useId;
+		this.useAddress = useAddress;
+		this.boardNo = boardNo;
+		this.boardContent = boardContent;
+		this.boardPrice = boardPrice;
+		this.boardDate = boardDate;
+		this.boardCommit = boardCommit;
+	}
+	
+	public String getUseId() {
+		return useId;
+	}
+
+	public void setUseId(String useId) {
+		this.useId = useId;
+	}
+
+	public String getUseAddress() {
+		return useAddress;
+	}
+
+	public void setUseAddress(String useAddress) {
+		this.useAddress = useAddress;
+	}
+
+	public int getBoardNo() {
+		return boardNo;
+	}
+
+	public void setBoardNo(int boardNo) {
+		this.boardNo = boardNo;
+	}
+
+	public String getboardContent() {
+		return boardContent;
+	}
+
+	public void setboardContent(String boardContent) {
+		this.boardContent = boardContent;
+	}
+
+	public Date getBoardDate() {
+		return boardDate;
+	}
+
+	public void setBoardDate(Date boardDate) {
+		this.boardDate = boardDate;
+	}
+
+	public boolean isBoardCommit() {
+		return boardCommit;
+	}
+
+	public void setBoardCommit(boolean boardCommit) {
+		this.boardCommit = boardCommit;
+	}
+
+	
+	
+
+	
+}

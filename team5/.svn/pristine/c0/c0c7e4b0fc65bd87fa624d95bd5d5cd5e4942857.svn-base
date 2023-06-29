@@ -1,0 +1,13 @@
+package team5.util;
+
+public class MyRangeException extends RuntimeException{
+	
+	public MyRangeException() { } //생성자 생성
+	
+	public MyRangeException(String start, String end) {
+		super(start + "~" + end + "자리의 값을 입력하세요");
+		
+		
+	}
+
+}

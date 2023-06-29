@@ -1,0 +1,37 @@
+package team5;
+
+import java.util.Date;
+
+/**
+ * @author DG
+ * @since 23/02/06 19:00
+ * 
+ * UserItemBoard 생성
+ */
+public class UsedItemBoard {
+	/*
+	 *		UseId 							Member객체에서 받아 올 것
+	 *		UseAddress						Member객체에서 받아 올 것 
+	 *		BoardNo 글번호					UsedItemBoard에서 게시글 용 번호
+	 *		BoardWrite 글 작성				UsedItemBoard에서 게시글 쓰기
+	 *		BoardDate 글 작성 시간			UserItemBoard에서 글 작성 시간
+	 *		BoardCommit 판매완료 여부		UsedItemBoard에서 판매완료 여부
+	 *		Board
+	 *		고려사항 - Product에 값 전달 해주기(메소드)
+	 *				   글쓰기(메소드)
+	 *				   글수정(메소드)
+	 *				   글삭제(메소드)
+	 * */
+	
+	private String useId;
+	private String useAddress;
+	private int boardNo;
+	private String boardWrite;
+	private Date boardDate;
+	private boolean boardCommit;
+	
+	
+	
+	
+	
+}

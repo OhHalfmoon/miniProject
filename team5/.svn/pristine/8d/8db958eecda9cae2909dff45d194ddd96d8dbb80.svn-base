@@ -1,0 +1,45 @@
+package team5;
+
+
+/**
+ * @author DG
+ * @since 02/11
+ * vinteageMain 생성
+ * 로그인 및 회원가입 (Member 연결)
+ * 게시글 등록 (UBoard 연결)
+ *
+ *
+ * 추가사항
+ * 각 service별 연결
+ * switch문 정리
+ *
+ */
+public class vintageMain {
+	public static void main(String[] args) throws Exception{
+		boolean run = true;
+		MemberService ms = MemberServiceImpl.getInstance();
+		UBoardServer ubs = new UBoardServerImpl();
+		while(run) {
+			int input = Utils.nextInt("1.로그인 2. 회원가입");
+			switch (input) {
+			case 1 :
+				ms.login();
+				switch(input = Utils.nextInt("1.중고거래 게시글 등록 2. 회원가입"))
+				{
+					case 1: 
+					ubs.ubsRegister();
+					break;
+				}
+				break;
+			case 2:
+				ms.register();
+				break;
+			default:
+				break;
+			}
+		}
+		
+		
+		
+	}
+}

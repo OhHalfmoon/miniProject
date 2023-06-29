@@ -1,0 +1,47 @@
+package team5.service;
+
+import java.util.List;
+
+import team5.vo.Product;
+
+/**
+ * @Author 우성준
+ * 
+ * @since 23/02/08
+ * 
+ *        상품기능인터페이스
+ */
+
+public interface ProductService {
+	List<Product> getProducts();
+
+	void setProducts(List<Product> products);
+
+	void register(String writer);
+
+	void modify(String writer);
+
+	void remove(String writer);
+
+	void info(int proId);
+
+	void list();
+
+	Product findBy(int proId);
+
+	List<Product> getWare();
+
+	void setWare(List<Product> ware);
+
+	void decreaseProCnt(int proId);
+
+	void increaseProCnt();
+
+	void saveWare();
+
+	void save();
+	
+	Product findByWare(int proId);
+
+	String adminCheck(String writer);
+}

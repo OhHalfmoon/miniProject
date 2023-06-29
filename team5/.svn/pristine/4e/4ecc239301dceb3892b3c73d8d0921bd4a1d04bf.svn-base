@@ -1,0 +1,23 @@
+package team5.service;
+
+import team5.vo.Review;
+
+public interface ReviewService {
+	/*
+	 * @Author:우성준
+	 * 
+	 * @Since 23/02/08
+	 * 
+	 * 후기기능인터페이스
+	 */
+	
+	
+	void register(String writer, int proId);
+	void remove(String writer, int proId);
+	void reviewList(int proId);
+	Review findBy(String writer, int proId);
+	void save();
+	
+//	List<Review> findByProId(int proId);
+	
+}

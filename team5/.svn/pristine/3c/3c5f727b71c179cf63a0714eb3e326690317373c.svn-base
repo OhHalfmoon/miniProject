@@ -1,0 +1,25 @@
+package team5;
+
+
+
+/**
+ * @author DG
+ * @since 02/07
+ * 
+ * UBoardService생성
+ * ubsRegister()
+ * ubsModifty()
+ * ubsRemove()
+ * usbList()
+ * 생성
+ * 
+ * 02/08
+ * 메소드 명 변경
+ */
+public interface UBoardServer {
+	void ubsRegister();			//글 쓰기
+	void ubsModify();			//글 수정	
+	void ubsRemove();			//글 삭제
+	void ubsList();				//글 목록
+
+}

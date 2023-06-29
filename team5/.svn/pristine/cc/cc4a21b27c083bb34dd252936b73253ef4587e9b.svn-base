@@ -1,0 +1,111 @@
+package team5;
+import static team5.Utils.nextInt;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import team5.Order;
+public class OrderServiceImpl implements OrderService{
+	static OrderServiceImpl cc = new OrderServiceImpl();
+	static CartServiceImpl c = new CartServiceImpl();
+	static int orderNum = 1;
+	static boolean run = true;
+	
+	
+//	CartServiceImpl cart = new CartServiceImpl();
+//	public List<Product> orders = cart.carts;
+	
+	public List<Order> receipts = new ArrayList<Order>();	
+	
+	
+//	int orderNum, String userID, String proName, int proPrice
+	{
+//	receipts.add(new Order(1, "aaa1", "청바지", 39000));
+//	receipts.add(new Order(2, "aaa2", "청바지", 39000));
+//	receipts.add(new Order(3, "aaa3", "청바지", 39000));
+	
+	}
+
+	@Override
+	public void buy() {
+		
+		System.out.println("============장바구니=============");
+		c.getProdList();
+//		for (int i = 0; i<orders.size(); i++) {
+//			System.out.println((i+1)+"번 : "+(orders.get(i).getProName()+" : "+orders.get(i).getProPrice()+"원"));
+//		} int sum = 0;
+//			for (int i =0; i<orders.size(); i++) {
+//				sum = sum + orders.get(i).getProPrice();
+//			}
+//		System.out.println("총 합계 : "+ sum+"원");		
+//		c.getProdList();
+		System.out.println("=================================");
+		System.out.println("주문하신 상품을 구매하시겠습니까?");
+		int question = Utils.nextInt("1. 예                   2. 아니요");			
+		if (question == 1) {
+			System.out.println("주문이 완료되었습니다.");
+			System.out.println("============주문내역=============");
+			
+//			int orderNum, String userID, String proName, int proPrice
+//			orderNum++;
+			for (int i = 0; i<c.carts.size(); i++) {
+				receipts.add(new Order(orderNum, "aaa4", c.carts.get(i).getProName(),c.carts.get(i).getProPrice()));
+				orderNum++;
+			}
+			
+			c.carts = new ArrayList<Product>();
+			for (int i = 0; i<receipts.size(); i++) {
+			System.out.println("영수증"+receipts.get(i).getOrderNum()+" "+receipts.get(i).getUserID()
+					+" "+receipts.get(i).getProName()+" "+receipts.get(i).getProPrice());
+			}
+			
+		}
+		else if (question == 2) {
+			System.out.println("주문이 취소되었습니다");
+		}
+		
+	}
+
+	@Override
+	public void cancel() {
+		// TODO Auto-generated method stub
+		
+	}
+//	public static void main(String[] args) {
+//		while(run) {
+//			run();
+//		}
+//	}
+//	
+//		
+//		public static void run() {
+//			 
+//			int input = Utils.nextInt("1.추가   2.삭제   3.조회   4.구매   5.종료");
+//			switch (input) {
+//				case 1:
+//					c.addProd();
+//					break;
+//				case 2:
+//					c.removeProd();
+//					break;
+//				case 3:
+//					c.getProdList();
+//					break;
+//				case 4:
+//					cc.buy();
+//					break;
+//				case 5:
+//					run = false;
+//					break;
+//				 
+//				 
+//				 
+//			
+//			}
+//		}
+//		
+//	
+
+}
+
+

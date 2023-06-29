@@ -1,0 +1,133 @@
+package team5;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static team5.Utils.*;
+
+public class ReviewServiceImpl implements ReviewService {
+	/*
+	 * @Author:우성준
+	 * 
+	 * @Since 23/02/08 후기기능담당클래스
+	 * 
+	 * IOstream추가, 싱글톤추가, 메소드 지역변수추가(String writer)
+	 * 멤버서비스 및 오더서비스 필요
+	 *
+	 */
+	
+	List<Review> ReviewList = new ArrayList<Review>();
+//	OrderSerive os = OrderServiceImpl.getInstance(); 구매내역가져오기
+	private Long rno = 0L;
+
+	private static ReviewService reviewService = new ReviewServiceImpl();// 인스턴스 생성, 클래스가 로드 될때 1번 실행//
+
+	private ReviewServiceImpl() {
+	} // 생성자
+
+	// 메소드
+	public static ReviewService getInstance() {
+		return reviewService;
+	}
+
+	{
+		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("Review.ser"))) {
+			ReviewList = (List<Review>) inputStream.readObject();
+		} catch (FileNotFoundException e) {
+			ReviewList.add(new Review(1001, "너무 멋있어요!", new Date(), "sj", rno++, true));
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+//	후기등록
+	@Override
+	public void register(String writer, int proId) {
+//		if(os.findBy(writer).findBy(proId)==null && finBby(writer, proId).getDuplication == true {
+//			System.err.println("접근권한이 없습니다");
+//			return;
+//		}
+		String s = nextLine("후기를 입력하세요 >");
+		Review r = new Review();
+		r.setProId(proId);
+		r.setContent(s);
+		r.setRegDate(new Date());
+		r.setDuplication(true);
+		ReviewList.add(r);
+		save();
+	}
+
+//	후기삭제
+	@Override
+	public void remove(String writer, int proId) {
+//		if(os.findBy(writer).findBy(proId)==null || finBby(writer, proId).getDuplication == false {
+//			System.err.println("접근권한이 없습니다");
+//			return;
+//		}
+		ReviewList.remove(proId);
+		save();
+	}
+
+//	상품별 후기리스트
+	@Override
+	public void reviewList(int proId) {
+		System.out.println();
+		System.out.println("후기");
+		System.out.println(
+				"=================================================================================================");
+		for (int i = 0; i < ReviewList.size(); i++) {
+			if (ReviewList.get(i).getProId() == proId) {
+				System.out.println(ReviewList.get(i).getRno() + "  내용: " + ReviewList.get(i).getContent() + "  등록날짜: "
+						+ ReviewList.get(i).getRegDate() + "   작성자: " + ReviewList.get(i).getWriter());
+				System.out.println(
+						"=================================================================================================");
+			}
+		}
+
+	}
+	
+	public Review findBy(String writer, int proId) {
+		Review review = null;
+		for (int i = 0; i < ReviewList.size(); i++) {
+			if (ReviewList.get(i).getWriter() == writer && ReviewList.get(i).getProId() == proId) {
+				review = ReviewList.get(i);
+				break;
+			}
+		}
+		return review;
+	}
+	
+	public void save() {
+		try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("review.ser"))){
+			objectOutputStream.writeObject(ReviewList);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+//	@Override
+//	public List<Review> findByProId(int proId) {
+//		System.out.println(ReviewList.size());
+//		for(int i = 0; i < ReviewList.size(); i++){
+//			if(ReviewList.get(i).getProId()==proId)
+//			reviews.add(ReviewList.get(0));
+//		}
+//		System.out.println(reviews);
+//		return reviews;
+//	}
+
+//	public static void main(String[] args) {
+//		ReviewServiceImpl impl = new ReviewServiceImpl();
+////		impl.register(1);
+////		impl.reviewList(1);
+//	}
+
+}

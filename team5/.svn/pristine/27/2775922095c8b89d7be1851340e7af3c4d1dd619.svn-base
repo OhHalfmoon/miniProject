@@ -1,0 +1,184 @@
+package team5;
+import static team5.Utils.nextInt;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class OrderServiceImpl implements OrderService{
+	
+	//최초 주문번호 : 1부터 시작하기 위해
+	static int orderNum = 1;
+	
+	// 싱글톤
+	private static OrderService orderService = new OrderServiceImpl();
+	
+	private OrderServiceImpl() {
+		
+	}
+	
+	public static OrderService getInstance() {
+		return orderService;
+	}
+
+	public List<Order> receipts = new ArrayList<Order>();	
+	CartService2 c = CartServiceImpl2.getInstance();
+	private Product product;
+	private Order order;
+	
+	{
+		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Order.ser"))) {
+			receipts = (List<Order>)ois.readObject();
+		}
+		catch (FileNotFoundException e) {
+			
+		}
+		catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	
+	@Override
+	//물건구매
+	public void buy() {
+		
+		System.out.println("============장바구니=============");
+		c.display();
+		System.out.println("=================================");
+		System.out.println("주문하신 상품을 구매하시겠습니까?");
+		int question = Utils.nextInt("1. 예                   2. 아니요");			
+		if (question == 1) {
+			System.out.println("주문이 완료되었습니다.");
+			System.out.println("============주문내역=============");			
+
+			for (int i = 0; i<c.getCarts().size(); i++) {
+				receipts.add(new Order(orderNum, "유저ID", c.getCarts().get(i).getProName(), c.getCarts().get(i). getProId(),  c.getCarts().get(i).getProPrice()));
+				orderNum++;
+			}
+			//여기서 장바구니 초기화 진행
+			c.getCarts().clear();
+			for (int i = 0; i<receipts.size(); i++) {
+			System.out.println("영수증"+receipts.get(i).getOrderNum()+" "+receipts.get(i).getUserID()
+					+" "+receipts.get(i).getProName()+" "+receipts.get(i).getProPrice());
+			}
+			
+		}
+		else if (question == 2) {
+			System.out.println("주문이 취소되었습니다");
+		}
+		
+	}
+
+	@Override
+	public void removeOrder() {
+		// TODO Auto-generated method stub
+		product = c.findByCart(nextInt("상품코드를 입력하세요"));
+		c.getCarts().remove(product);
+		System.out.println("항목이 삭제되었습니다.");
+		
+		
+	}
+	
+	
+	
+	
+
+//	public Product findByOrder(int proId) {
+//		// TODO Auto-generated method stub
+//		Product product = null;
+//		for (int i = 0; i < c.getCarts().size(); i++) {
+//			if (c.getCarts().get(i).getProId() == proId) {
+//				product = c.getCarts().get(i);
+//				break;
+//			}
+//		}
+//		return product;
+//	}
+	
+	public Order findByOrder(String userID, int proId) {
+		// TODO Auto-generated method stub
+		Order order = null;
+		for (int i = 0; i < receipts.size(); i++) {
+			if ((receipts.get(i).getUserID() == userID) 
+			   && (receipts.get(i).getProId() == proId)) {
+				order = receipts.get(i);
+				break;
+			}
+		}
+		return order;
+	}
+	
+	
+	public void displayOrder() {
+		for (int i = 0; i<receipts.size(); i++) {
+			System.out.println((i+1)+"번 : "+(receipts.get(i).getProName()+" : "+receipts.get(i).getProPrice()+"원"));
+		} int sum = 0;
+			for (int i =0; i<receipts.size(); i++) {
+				sum = sum + receipts.get(i).getProPrice();
+			}
+		System.out.println("총 합계 : "+ sum+"원");	
+	}
+	
+	private void save() {
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Order.ser"))){
+			oos.writeObject(receipts);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	public static void main(String[] args) {
+//		OrderServiceImpl ord = OrderServiceImpl.getOrderInstance();
+//		CartServiceImpl ca = CartServiceImpl.getCartInstance();
+//		ca.addCart(3003);
+//		ord.removeOrder();
+//		ord.buy();
+//		ord.displayOrder();
+//		while(run) {
+//			run();\
+//		}
+	
+	}
+//	
+//		
+//		public static void run() {
+//			 
+//			int input = Utils.nextInt("1.추가   2.삭제   3.조회   4.구매   5.종료");
+//			switch (input) {
+//				case 1:
+//					c.addProd();
+//					break;
+//				case 2:
+//					c.removeProd();
+//					break;
+//				case 3:
+//					c.getProdList();
+//					break;
+//				case 4:
+//					cc.buy();
+//					break;
+//				case 5:
+//					run = false;
+//					break;
+//				 
+//				 
+//				 
+//			
+//			}
+//		}
+//		
+//	
+
+}
+
+

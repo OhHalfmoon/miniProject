@@ -1,0 +1,207 @@
+package team5.service;
+import static team5.util.Utils.nextInt;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.plaf.synth.SynthGraphicsUtils;
+
+import team5.util.Utils;
+import team5.vo.Order;
+import team5.vo.Product;
+
+
+public class OrderServiceImpl implements OrderService{
+	
+	//최초 주문번호 : 1부터 시작하기 위해
+//	static int orderNum = 1;
+	
+	// 싱글톤
+	private static OrderService orderService = new OrderServiceImpl();
+	
+	private OrderServiceImpl() {
+		
+	}
+	
+	public static OrderService getInstance() {
+		return orderService;
+	}
+
+	private List<Order> receipts = new ArrayList<Order>();		
+	
+	public List<Order> getReceipts() {
+		return receipts;
+	}
+
+	public void setReceipts(List<Order> receipts) {
+		this.receipts = receipts;
+	}
+
+	CartService cartService = CartServiceImpl.getInstance();
+	
+	ProductService productService = ProductServiceImpl.getInstance();
+	
+	MemberService memberService = MemberServiceImpl.getInstance();
+	private Product product;
+//	private Order order;
+	
+	{
+		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Order.ser"))) {
+			receipts = (List<Order>)ois.readObject();
+		}
+		catch (FileNotFoundException e) {
+			
+		}
+		catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	
+	@Override
+	//물건구매
+	public void buy() {
+		
+		productService = ProductServiceImpl.getInstance();
+		cartService = CartServiceImpl.getInstance();
+		System.out.println("============장바구니=============");
+		cartService.displayCart();
+		System.out.println("=================================");
+		System.out.println("주문하신 상품을 구매하시겠습니까?");
+		int question = Utils.nextInt("1. 예                   2. 아니요");			
+		if (question == 1) {
+			System.out.println("주문이 완료되었습니다.");
+			System.out.println("============주문내역=============");	
+
+			for (Product p : cartService.getCarts()) {
+				receipts.add(new Order(receipts.size()+1, memberService.getLoginUser().getUserId(), p.getProName(), p.getProId(), p.getProPrice()));
+				
+//				order.setOrderNum(order.getOrderNum()+1);
+			}
+			//여기서 장바구니 초기화 진행
+			cartService.getCarts().clear();
+			String Id = memberService.getLoginUser().getUserId();
+			for (Order o : receipts) {				
+				if(o.getUserId().equals(Id)) {
+					System.out.println(o);
+				}
+			} int sum = 0;
+			for (Order o : receipts) {
+				sum = sum + o.getProPrice(); 
+			}
+			System.out.println("총 합계 : "+ sum+"원");
+			
+//			displayOrder();
+			save();			
+		}
+		else if (question == 2) {
+			System.out.println("주문이 취소되었습니다");
+		}		
+	}
+
+	@Override
+//	public voId removeOrder() {
+//		// TODO Auto-generated method stub
+//		product = cartService.findByCart(nextInt("상품코드를 입력하세요"));
+//		cartService.getCarts().remove(product);		
+//		System.out.println("항목이 삭제되었습니다.");	
+//	}
+	
+	
+	
+	
+
+//	public Product findByOrder(int proId) {
+//		// TODO Auto-generated method stub
+//		Product product = null;
+//		for (int i = 0; i < c.getCarts().size(); i++) {
+//			if (c.getCarts().get(i).getProId() == proId) {
+//				product = c.getCarts().get(i);
+//				break;
+//			}
+//		}
+//		return product;
+//	}
+	
+	public Order findByOrder(String userId, int proId) {	
+		Order order = null;
+		for (Order o : receipts) {
+			if ((o.getUserId().equals(userId)) && (o.getProId() == proId)) {
+				order = o;
+				break;
+			}
+		}
+		return order;
+	}
+	
+	public Order findByReceipt(String userId) {
+		Order order = null;
+		for (Order o : receipts) {
+			if (o.getUserId().equals(userId)) {
+				order = o;
+				break;
+			}
+		}
+		return order;
+	}
+//	public void displayOrder() {
+//		for (Order o : receipts) {
+//			System.out.println (o);
+////			System.out.println ("결제번호 "+(o.getOrderNum()+"번 : 주문자 : "+o.getUserId()+" : "+o.getProName()+" : "+o.getProPrice()+"원"));
+//		} int sum = 0;
+//			for (Order o : receipts) {
+//				sum = sum + o.getProPrice();
+//			}
+//		System.out.println("총 합계 : "+ sum+"원");	
+//	}
+	
+	public void displayOrder() {
+		
+//		if receipts.get(findByReceipt(Utils.nextLine("ID를 입력하세요"))) {
+//		
+		String Id = Utils.nextLine("ID를 입력하세요");
+		for (Order o : receipts) {
+			if(o.getUserId().equals(Id)) {
+				System.out.println(o);
+			}
+		} int sum = 0;
+		for (Order o : receipts) {
+			sum = sum + o.getProPrice(); 
+		}
+		System.out.println("총 합계 : "+ sum+"원");
+	}
+//	
+//		} int sum = 0;
+//			
+//		System.out.println("총 합계 : "+ sum+"원");	
+
+	
+	private void save() {
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Order.ser"))){
+			oos.writeObject(receipts);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		OrderService ord = OrderServiceImpl.getInstance();
+		CartService ca = CartServiceImpl.getInstance();
+		ca.addCart(3003);
+//		ca.removeCart();
+		ord.buy();
+//		ca.display();
+		ord.displayOrder();	
+	}
+}
+
+

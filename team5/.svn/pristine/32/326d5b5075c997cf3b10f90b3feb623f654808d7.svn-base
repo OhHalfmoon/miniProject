@@ -1,0 +1,68 @@
+//package team5;
+//
+///**
+// * @author 오상현
+// *@since 23/02/07
+// *장바구니(카트)VO에서 필요한 변수 정의
+// *유저id, 물품id, 물품가격, 물품수량
+// */
+//public class Cart {
+////아이디, 물건번호, 물건 가격, 물건 수량
+//	private String id;
+//	private int prodId;
+//	private int prodPrice;
+//	private int prodCnt;
+//	
+//	
+//	public Cart() {
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public Cart(String id, int prodId, int prodPrice, int prodCnt) {
+//		super();
+//		this.id = id;
+//		this.prodId = prodId;
+//		this.prodPrice = prodPrice;
+//		this.prodCnt = prodCnt;
+//	}
+//
+//	public String getId() {
+//		return id;
+//	}
+//
+//	public void setId(String id) {
+//		this.id = id;
+//	}
+//
+//	public int getProdId() {
+//		return prodId;
+//	}
+//
+//	public void setProdId(int prodId) {
+//		this.prodId = prodId;
+//	}
+//
+//	public int getProdPrice() {
+//		return prodPrice;
+//	}
+//
+//	public void setProdPrice(int prodPrice) {
+//		this.prodPrice = prodPrice;
+//	}
+//
+//	public int getProdCnt() {
+//		return prodCnt;
+//	}
+//
+//	public void setProdCnt(int prodCnt) {
+//		this.prodCnt = prodCnt;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "Cart [id=" + id + ", prodId=" + prodId + ", prodPrice=" + prodPrice + ", prodCnt=" + prodCnt + "]";
+//	}
+//	
+//}
+//
+

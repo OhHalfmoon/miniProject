@@ -1,0 +1,57 @@
+//package team5;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+///**
+// * @author 오상현
+// * 카트에 Product타입의 물건을 받아 배열을 생성
+// * add 메서드 : 인자값 : Product타입의 prod, int타입의 prodCnt(구입수량)
+// * setProCnt를 통해 수량 입력을 받음 -> 물건 구매창에서 입력 받아야 함
+// * getProdList를 통해 장바구니에 담긴 물품을 확인 
+// */
+//
+//public class Cart2 {
+//	private String userID;
+//	private int proId;
+//	private int proCnt;
+//	
+//	
+//	static List<Product> carts = new ArrayList<>();
+//	
+//	public Cart2() {
+//		
+//	}
+//	public Cart2(String userId, int proId, int proCnt) {
+//		this.userID = userId;
+//		this.proId = proId;
+//		this.proCnt = proCnt;		
+//	}
+//	
+//	
+//	
+//	
+//	void add(Product prod, int prodCnt) {
+//		Product product = new Product();
+//		product = prod;
+//		
+////		int cnt = 0;
+////		for (int i = 0; i <carts.size(); i++) {
+////			if(carts.get(i).getProId() == product.getProId()) {
+////				cnt = cnt+1;
+////			}
+////		}
+//		product.setProCnt(prodCnt);
+//		carts.add(product);		
+//	}
+//	
+//	void getProdList() {
+//		for(int i =0; i < carts.size(); i++) {
+//			System.out.println((i+1)+"번째 물품 : " + carts.get(i));			
+//		}
+//	}
+//	
+////	void remove() {
+////		carts.
+////	}
+//}

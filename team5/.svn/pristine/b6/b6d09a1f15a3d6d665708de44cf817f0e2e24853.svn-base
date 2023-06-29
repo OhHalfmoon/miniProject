@@ -1,0 +1,19 @@
+package team5;
+
+/*
+ * @Author 우성준
+ * 
+ * @since 23/02/08
+ * 
+ * 상품기능인터페이스
+ */
+
+public interface ProductService {
+	void register(String writer);
+	void modify(String writer);
+	void remove(String writer);
+	void info(int proId);
+	void list();
+	Product findBy(int proId);
+	void save();
+}

@@ -1,0 +1,62 @@
+package team5;
+
+public class Order {
+	
+	//주문번호
+		private int orderNum;
+		private String userID;
+		private String proName;
+//		private int proCnt;
+		private int proPrice;
+		
+		public Order() {
+			// TODO Auto-generated constructor stub
+		}
+
+		public Order(int orderNum, String userID, String proName, int proPrice) {
+			super();
+			this.orderNum = orderNum;
+			this.userID = userID;
+			this.proName = proName;
+			this.proPrice = proPrice;
+		}
+
+		public int getOrderNum() {
+			return orderNum;
+		}
+
+		public void setOrderNum(int orderNum) {
+			this.orderNum = orderNum;
+		}
+
+		public String getUserID() {
+			return userID;
+		}
+
+		public void setUserID(String userID) {
+			this.userID = userID;
+		}
+
+		public String getProName() {
+			return proName;
+		}
+
+		public void setProName(String proName) {
+			this.proName = proName;
+		}
+
+		public int getProPrice() {
+			return proPrice;
+		}
+
+		public void setProPrice(int proPrice) {
+			this.proPrice = proPrice;
+		}
+
+		@Override
+		public String toString() {
+			return "Order [orderNum=" + orderNum + ", userID=" + userID + ", proName=" + proName + ", proPrice="
+					+ proPrice + "]";
+		}		
+		
+}		

@@ -1,0 +1,149 @@
+package team5;
+
+import java.util.Scanner;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+/*
+ * @Author 고은채
+ * 
+ * @Since 23/02/06
+ * 
+ * 23/02/08
+ * Member VO 담당
+ * 경도와 위도를 받아올 변수 (x, y) 추가
+ * 주소를 받아올 변수 추가 
+ */
+
+public class Member implements Comparable<Member>, Serializable{
+	
+	private String name;
+	private String userID; //pk
+	private String password;
+	private String addr;
+	private String phoneNum; 
+	
+	private Date regDate; //가입일
+	private String proID;
+	
+	// 경도, 위도, 주소 받아오기
+	private double x;
+	private double y;
+	private String roadAddress;
+	
+
+	//ArrayList<String> proId = new ArrayList<String>();
+	
+	
+	public Member() {
+		//Member 기본 생성자
+	}
+	
+	public Member(String name, String userID, String password, String addr, String phoneNum, double x, double y) {
+		super();
+		this.name = name;
+		this.userID = userID;
+		this.password = password;
+		this.addr = addr;
+		this.phoneNum = phoneNum;
+		this.x = x;
+		this.y = y;
+		
+		
+		// this.proID = 
+	
+	}	
+	
+//	List<String> PhoneNum = new ArrayList<String>();
+//	List<Integer> password = new ArrayList<Integer>();
+	
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getUserID() {
+		return userID;
+		// cart 불러오긔.......
+	}
+	
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public String getAddr() {
+		return addr;
+	}
+	
+	public void setAddr(String addr) {
+		this.addr = addr;
+	}
+	
+	public String getPhoneNum() {
+		return phoneNum;
+	}
+	
+	public void setPhoneNum(String phoneNum) {
+		this.phoneNum = phoneNum;
+	}
+
+	public String getProID() {
+		return proID;
+	}
+
+	public void setProID(String proID) {
+		this.proID = proID;
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public String getLocation() {
+		return roadAddress;
+	}
+
+	public void setLocation(String location) {
+		this.roadAddress = location;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Member [name=" + name + ", userID=" + userID + ", password=" + password + ", addr=" + addr
+				+ ", phoneNum=" + phoneNum + ", proID=" + proID + ", x=" + x + ", y=" + y + ", roadAddress="
+				+ roadAddress + "]";
+	}
+
+	@Override
+	public int compareTo(Member o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+}

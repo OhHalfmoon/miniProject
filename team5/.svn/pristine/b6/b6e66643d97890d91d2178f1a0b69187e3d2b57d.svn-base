@@ -1,0 +1,213 @@
+package team5;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @author DG
+ * @since 02/07 UBoardServiceImpl 생성
+ * 
+ *        02/07 write, modify, remove 메소드 생성 아직 미구현 write 메소드 구현
+ * 
+ * 
+ *        02/08 write 메소드 -> ubsRegister로 변경 날짜 데이터 값을 %s에 표현 방법 해결 1차 싱글톤 연결
+ *        실패(Member 미구현)
+ * 
+ *        02/10 Member에서 로그인정보 싱글톤 객체로 성공
+ * 
+ *        02/11 ListMethod 수정 toString에 syso format 사용 02/11 ObjectInputStream,
+ *        ObjectOutputStream 사용 파일의 영속화 02/12 saveIo 추가 cntBno 추가
+ */
+public class UBoardServerImpl implements UBoardServer {
+
+	private int boardCnt = 1; // 글 번호
+	private List<UBoard> boards = new ArrayList<UBoard>(); // UBoard타입의 글목록을 담을 boards를 생성
+	private List<Member> members; // 영속화한 member파일에 값 담을 공간
+	private MemberService ms = MemberServiceImpl.getInstance(); // Login한 멤버의 주소값 불러오기
+
+	{
+		try (ObjectInputStream oismember = new ObjectInputStream(new FileInputStream("member.ser"))) {
+			members = (List<Member>) oismember.readObject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try (ObjectInputStream oisboard = new ObjectInputStream(new FileInputStream("ubrList.ser"))) {
+			boards = (List<UBoard>) oisboard.readObject();
+		} catch (Exception e) {
+			boards.add(new UBoard("police", "서울특별시 구로구 가마산로 235(구로동)", boardCnt, "후드티", 30000, new Date(), false));
+			boardCnt++;
+			boards.add(new UBoard("center", "서울특별시 구로구 디지털로31길 93(구로동)", boardCnt, "청바지", 15000, new Date(), false));
+			boardCnt++;
+		}
+		cntBno();
+	}
+
+	// 0211 아이디 찾는 메소드 추가
+	// 멤버 영속화 해놓은것 가져오기
+	// 불러온 파일의 x,y와 login.getlogin의 x,y와 비교해서 5km미만의 리스트 뽑기
+	private void distance() {
+		Member m1 = null;
+		for (int i = 0; i < members.size(); i++) {
+			m1 = members.get(i);
+			String dis = toStrDistanceFormat(getDistance(ms.getLoginUser(), m1));
+			if (!(ms.getLoginUser().getUserID().equals(m1.getUserID())) && !(m1.getUserID().equals("admin"))) {
+//				if (boards.get(i).getUseId().equals(m1.getUserID()) && getDistance(ms.getLoginUser(), m1) <= 5000) {
+					System.out.println("거래 가능한 ID : [" + m1.getUserID() + "] 님이고 거리는 : [" + dis + "] 입니다.");
+//				}
+			}
+		}
+	}
+
+	// 원래 static
+	public String toStrDistanceFormat(double d) {
+		return d > 1000 ? (int) (d / 10) / 100d + "km" : (int) d + "m";
+	}
+
+	// 원래 static
+	public double getDistance(Member m1, Member m2) {
+		final double EARTH_RADIUS = 6371;
+		double dLat = Math.toRadians(m2.getX() - m1.getX());
+		double dLon = Math.toRadians(m2.getY() - m2.getY());
+
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(m1.getX()))
+				* Math.cos(Math.toRadians(m2.getX())) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		double d = EARTH_RADIUS * c * 1000; // Distance in m
+		return d;
+	}
+
+	/**
+	 * 0212 영속화 한 파일에서 마지막 글번호를 불러오고 마지막번호와 boards.size와 같다면 글번호 증가 시켜주는 메소드
+	 */
+	@Override
+	public void cntBno() {
+		boardCnt = boards.get(boards.size() - 1).getBoardNo() + 1;// 마지막 번호에 +1
+		if (boardCnt == (boards.get(boards.size() - 1).getBoardNo())) {
+			boardCnt++;
+		}
+	}
+
+	/**
+	 * 0207 중고거래 게시글 등록 Method
+	 */
+	@Override
+	public void ubsRegister() {
+//		ms.login();
+		// 로그인 정보 가져오기
+
+		String content = Utils.nextLine("상품명을 입력해주세요(예:청바지)");
+		int price = Utils.nextInt("상품의 가격을 입력해주세요(예:30000)");
+		UBoard uBoard = new UBoard(ms.getLoginUser().getUserID(), ms.getLoginUser().getAddr(), boardCnt, content, price,
+				new Date(), false);
+		boards.add(uBoard);
+		boardCnt++;
+		saveIo();
+	}
+
+	/**
+	 * 0207 중고거래 게시글 수정 Method
+	 */
+	@Override
+	public void ubsModify() {
+		ubsList();
+		String content;
+		int price;
+		int sale;
+		UBoard uBoard = findByBoard(Utils.nextInt("수정(판매여부) 하실 글 번호를 입력해주세요(예:1)"));
+
+		findByBoard(uBoard.getBoardNo());
+		if (ms.getLoginUser().getUserID().equals(uBoard.getUseId())) {
+			sale = Utils.nextInt("판매완료는 1, 판매중은 2 번을 입력해주세요"); // 판매여부
+			if (sale == 1) {
+				uBoard.setBoardCommit(true);
+			} else if (sale == 2) {
+				uBoard.setBoardCommit(false);
+				content = Utils.nextLine("수정 하실 제품 명을 입력해주세요(예:후드티)");
+				price = Utils.nextInt("수정 하실 가격을 입력해주세요 (예:100000)");
+				uBoard.setboardContent(content);
+				uBoard.setboardPrice(price);
+				saveIo();
+			}
+		} else {
+			System.out.println("게시한 판매자와 아이디가 다릅니다.");
+		}
+	}
+
+	/**
+	 * 0207 중고거래 게시글 삭제 Method
+	 */
+	@Override
+	public void ubsRemove() {
+		ubsList();
+		UBoard uBoard = findByBoard(Utils.nextInt("삭제 하실 글 번호를 입력해주세요(예:1)"));
+		if (ms.getLoginUser().getUserID().equals(uBoard.getUseId())) {
+			boards.remove(uBoard);
+			saveIo();
+		} else {
+			System.out.println("게시한 판매자와 아이디가 다릅니다.");
+		}
+	}
+
+	/**
+	 * 0207
+	 * 
+	 * 중고거래 게시글 목록 Method
+	 */
+	@Override
+	public void ubsList() {
+		distance();
+		Collection<UBoard> cub = boards;
+		cub = boards;
+		System.out.println("글번호   작성자   물품   가격             올린날짜            판매여부");
+		System.out.println("======================================================================");
+		for (UBoard uboard : cub) {
+			System.out.println(uboard);
+		}
+//		toString 으로 인한 삭제
+//		for (int i = 0; i < boards.size(); i++) {
+//			
+//			String sale = boards.get(i).isBoardCommit() == true ? "판매완료" : "판매중";
+//			System.out.printf("%3d %10s %5s %7d %15s %7s", boards.get(i).getBoardNo(), boards.get(i).getUseId(),
+//					boards.get(i).getboardContent(), boards.get(i).getboardPrice(),
+//					new SimpleDateFormat("yy/MM/dd HH:mm:ss").format(boards.get(i).getBoardDate()), sale);
+//		}
+	}
+
+	/**
+	 * 파일의 영속화를 위해 중고거래 글 저장
+	 * 
+	 */
+	private void saveIo() {
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("ubrList.ser"))) {
+			oos.writeObject(boards);
+		} catch (Exception e) {
+			System.err.println("오류");
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @param 글번호
+	 * @return uBoard
+	 * 
+	 *         0208 수정삭제에 필요한 글번호 가져오는 메소드 추가 수정,삭제 할 게시판의 글번호를 입력하면 가져온다
+	 */
+	UBoard findByBoard(int bNo) {
+
+		UBoard uBoard = null;
+		for (int i = 0; i < boards.size(); i++) {
+			if (boards.get(i).getBoardNo() == bNo) {
+				uBoard = boards.get(i);
+				break;
+			}
+		}
+		return uBoard;
+	}
+
+}

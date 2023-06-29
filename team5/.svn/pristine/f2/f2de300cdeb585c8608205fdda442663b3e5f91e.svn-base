@@ -1,0 +1,98 @@
+package team5;
+
+import team5.service.CartService;
+import team5.service.CartServiceImpl;
+import team5.service.MemberService;
+import team5.service.MemberServiceImpl;
+import team5.service.OrderService;
+import team5.service.OrderServiceImpl;
+import team5.service.ProductService;
+import team5.service.ProductServiceImpl;
+import team5.service.ReviewService;
+import team5.service.ReviewServiceImpl;
+import team5.service.UBoardServer;
+import team5.service.UBoardServerImpl;
+import team5.util.Utils;
+
+/**
+ * @author DG
+ * @since 02/11 vinteageMain 생성 로그인 및 회원가입 (Member 연결) 게시글 등록 (UBoard 연결)
+ *
+ *
+ *        추가사항 각 service별 연결 switch문 정리
+ *
+ */
+public class vintageMain {
+	public static void main(String[] args) throws Exception {
+		boolean run = true;
+		MemberService ms = MemberServiceImpl.getInstance();
+		ProductService ps = ProductServiceImpl.getInstance();
+		ReviewService rs = ReviewServiceImpl.getInstance();
+		CartService cs = CartServiceImpl.getInstance();
+		OrderService os = OrderServiceImpl.getInstance();
+		
+		
+		while (run) {
+			int input = Utils.nextInt("1.로그인 2. 회원가입 3.종료");
+			// Member
+			switch (input) {
+			case 1:
+				ms.login();
+				// Product
+				switch (input = Utils.nextInt("1. 상품보기 2. 장바구니 3.구매 4. 구매내역조회 5. 회원정보수정 6. 회원탈퇴 ")) {
+				case 1:
+					ps.list();
+					int psInput = Utils.nextInt("구매하실 상품 코드를 입력하세요");
+					ps.info(psInput);
+					rs.reviewList(psInput);
+					int rsInput = Utils.nextInt("1. 장바구니 담기 2. 후기등록 3. 후기삭제");
+					switch (rsInput) {
+					case 1:
+						cs.addCart(psInput);
+						break;
+					case 2:
+						rs.register(ms.getLoginUser().getUserId(), psInput);
+						break;
+					case 3:
+						rs.remove(ms.getLoginUser().getUserId(), psInput);
+						break;
+					default:
+						break;
+					}
+					break;
+				case 2:
+					// 상품
+					cs.displayCart();
+					break;
+				case 3:
+					os.buy();
+					// 상품
+					break;
+				case 4: 
+					os.displayOrder();
+					break;
+				case 5:
+					ms.modify();
+					break;
+				case 6:
+					ms.remove();
+					break;
+				default:
+					break;
+				}
+
+				// Uboard
+				break;
+			case 2:
+				ms.register();
+				break;
+			case 3:
+				run = false;
+				break;
+			default:
+				break;
+			}
+		}
+
+	}
+}
