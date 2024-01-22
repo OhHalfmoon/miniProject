@@ -21,6 +21,9 @@ public interface CartService {
 	//물품번호 입력하여 해당물품번호 물건 찾기
 	Product findByCart(int proId);
 	
+	//회원 아이디 입력하여 추가한 물품 찾기
+	Product findByCartMemberId(String mem);
+	
 	//물품번호 입력하여 해당물품번호 물건 인덱스 찾기
 	int findByCartIdx(int proId);
 

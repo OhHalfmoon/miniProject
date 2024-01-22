@@ -21,10 +21,10 @@ public class Cart {
     }
     private List<Product> carts = new ArrayList<Product>();
     private Product product;
-    {
-    carts.add(new Product(1001,"하의", "청바지",1,(carts.get(0).getProPrice()*carts.get(0).getProCnt())));
-//	                carts.add(new Product("티셔츠", 1));
-    }
+//    {
+//    carts.add(new Product(1001,"하의", "청바지",1,(carts.get(0).getProPrice()*carts.get(0).getProCnt())));
+////	                carts.add(new Product("티셔츠", 1));
+//    }
 
     //장바구니에 담기
     public void addCart() {

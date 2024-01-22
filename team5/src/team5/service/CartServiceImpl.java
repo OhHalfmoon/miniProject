@@ -90,7 +90,7 @@ public class CartServiceImpl implements CartService{
 		int proCnt = nextInt("담을 수량을 입력하세요");
 		if ((proCnt <= product.getProCnt())&&(proCnt>0) ) {	
 			int cntPrice = proCnt*product.getProPrice();
-			carts.add(new Product(product.getProId(), product.getCategory(), product.getProName(), proCnt,cntPrice));
+			carts.add(new Product(product.getProId(), product.getCategory(), product.getProName(), proCnt,cntPrice, mem.getLoginUser().getUserId()));
 			System.out.println("장바구니에 물건이 추가되었습니다.");
 			prod.decreaseProCnt(proId);			
 		} else if (proCnt <= 0) {
@@ -106,15 +106,35 @@ public class CartServiceImpl implements CartService{
 //		boolean removeRun = true;
 //		while(removeRun) {
 //			try {
-				for (Product p : carts) {
-					System.out.println("상품코드 : "+p.getProId()+"  "+ p.getProName()+" : "+p.getProCnt()+"개, "+ p.getProPrice()+"원");
-					
-				} 				
+//				for (Product p : carts) {
+//					System.out.println("상품코드 : "+p.getProId()+"  "+ p.getProName()+" : "+p.getProCnt()+"개, "+ p.getProPrice()+"원");
+//					
+//				} 	
+				Product cartMem = findByCartMemberId(mem.getLoginUser().getUserId());
+				boolean containMem = carts.contains(cartMem);
+				if (containMem == false) {
+					 System.err.println("장바구니에 상품이 없습니다");
+					 return;
+				}
+		
+				for(int i = 0; i < carts.size(); i++) {
+					if (mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())) {
+						System.out.println("상품코드 : "+carts.get(i).getProId()+"  "+ carts.get(i).getProName()+" : "+carts.get(i).getProCnt()+"개, "+ carts.get(i).getProPrice()+"원");
+					}
+//					else if (!mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())){
+//						System.err.println("장바구니에 상품이 없습니다");
+//						return;
+//					}
+				}
 				int proId = nextInt("상품 코드를 입력하세요");
 				int productIdx = findByCartIdx(proId);
 				product = prod.findBy(proId);
 				Product caProduct = findByCart(proId);
 				boolean contain = carts.contains(caProduct);
+						if (!caProduct.getWriter().equals(mem.getLoginUser().getUserId())) {
+							 System.err.println("장바구니에 해당 상품이 없습니다");
+							 return;
+						}
 						if (contain == false) {				 
 							 System.err.println("장바구니에 상품이 없습니다");
 							 return;
@@ -147,13 +167,28 @@ public class CartServiceImpl implements CartService{
 	@Override
 	//현재 장바구니 내용조회 메서드
 	public void displayCart() {	
-		for (Product p : carts) {
-			System.out.println("상품코드 : "+p.getProId()+"  "+ p.getProName()+" : "+p.getProCnt()+"개, "+ p.getProPrice()+"원");
-		} 
-		int sum = 0;		
-		for (Product p : carts) {
-			sum = sum + p.getProPrice();
+		for(int i = 0; i < carts.size(); i++) {
+			if (mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())) {
+				System.out.println("상품코드 : "+carts.get(i).getProId()+"  "+ carts.get(i).getProName()+" : "+carts.get(i).getProCnt()+"개, "+ carts.get(i).getProPrice()+"원");
+			} 
+//			else if (!mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())){
+//				System.err.println("장바구니에 상품이 없습니다");
+//				return;
+//			}
+			
 		}
+//		for (Product p : carts) {
+//			System.out.println("상품코드 : "+p.getProId()+"  "+ p.getProName()+" : "+p.getProCnt()+"개, "+ p.getProPrice()+"원");
+//		} 
+		int sum = 0;
+		for(int i = 0; i < carts.size(); i++) {
+			if (mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())) {
+				sum = sum + carts.get(i).getProPrice();
+			}
+		}
+//		for (Product p : carts) {
+//			sum = sum + p.getProPrice();
+//		}
 		System.out.println("총 합계 : "+ sum+"원");		
 	}
 	//물품번호를 입력하여 장바구니에 담긴 해당 물품번호의 물건 찾기
@@ -162,6 +197,17 @@ public class CartServiceImpl implements CartService{
 		Product product = null;
 		for (int i = 0; i < carts.size(); i++) {
 			if (carts.get(i).getProId() == proId) {
+				product = carts.get(i);
+				break;
+			}
+		}
+		return product;
+	}
+	
+	public Product findByCartMemberId(String mem) {
+		Product product = null;
+		for (int i = 0; i < carts.size(); i++) {
+			if (carts.get(i).getWriter() == mem) {
 				product = carts.get(i);
 				break;
 			}

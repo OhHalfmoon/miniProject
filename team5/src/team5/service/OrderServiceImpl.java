@@ -67,6 +67,8 @@ public class OrderServiceImpl implements OrderService{
 		 
 		productService = ProductServiceImpl.getInstance();
 		cartService = CartServiceImpl.getInstance();
+
+		
 		System.out.println("============장바구니=============");
 		cartService.displayCart();
 		System.out.println("=================================");
@@ -76,20 +78,45 @@ public class OrderServiceImpl implements OrderService{
 			if (cartService.getCarts().size()!=0) {					
 				System.out.println("주문이 완료되었습니다.");
 				System.out.println("============주문내역=============");	
-				for (Product p : cartService.getCarts()) {
-					receipts.add(new Order(receipts.size()+1, memberService.getLoginUser().getUserId(), 
-						p.getProName(), p.getProId(), p.getProCnt(), p.getProPrice()));
+				for(int i = 0; i < cartService.getCarts().size(); i++) {
+					
+					String mem = memberService.getLoginUser().getUserId();
+					Product p = cartService.getCarts().get(i);
+					
+					if (mem.equals(cartService.getCarts().get(i).getWriter())) {						
+						receipts.add(new Order(receipts.size()+1, mem, p.getProName(), p.getProId(), p.getProCnt(), p.getProPrice()));
+					}
 				}
+//				for (Product p : cartService.getCarts()) {
+//					receipts.add(new Order(receipts.size()+1, memberService.getLoginUser().getUserId(), 
+//						p.getProName(), p.getProId(), p.getProCnt(), p.getProPrice()));
+//				}
 			//여기서 장바구니 초기화 진행
+//				for (int i =0; i<productService.getWare().size(); i++) {
+//					Product waremin = productService.getWare().get(i);
+//					Product proddmin = productService.getProducts().get(i);
+//					waremin.setProCnt(proddmin.getProCnt());
+//					productService.save();
+//					productService.saveWare();
+//				}
 				for (int i =0; i<productService.getWare().size(); i++) {
 					Product waremin = productService.getWare().get(i);
 					Product proddmin = productService.getProducts().get(i);
+					
 					waremin.setProCnt(proddmin.getProCnt());
 					productService.save();
 					productService.saveWare();
 				}
-				cartService.getCarts().clear();
 				String Id = memberService.getLoginUser().getUserId();
+				
+				for(int i = 0; i < cartService.getCarts().size(); i++) {					
+					Product p = cartService.getCarts().get(i);					
+					if (Id.equals(cartService.getCarts().get(i).getWriter())) {						
+						cartService.getCarts().remove(i);
+					}
+				}
+//				cartService.getCarts().clear();
+				
 				for (Order o : receipts) {				
 					if(o.getUserId().equals(Id)) {
 						System.out.println(o);

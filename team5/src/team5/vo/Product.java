@@ -24,13 +24,14 @@ public class Product implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Product(int proId, String category, String proName, int proCnt, int proPrice) {
+	public Product(int proId, String category, String proName, int proCnt, int proPrice, String writer) {
 		super();
 		this.proId = proId;
 		this.proName = proName;
 		this.category = category;
 		this.proCnt = proCnt;
 		this.proPrice = proPrice;
+		this.writer = writer;
 	}
 
 	public Product(int proId, String proName, String category, int proCnt, int proPrice, Date regDate, String writer,
