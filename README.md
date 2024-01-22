@@ -29,7 +29,7 @@
 
 ## 구현내용
 
-### Notion <a href="https://jonas-portfolio.notion.site/jonas-portfolio/Final-Spring-Boot-617e1c2a23544c6fa36d6e0a0079bedd">Notion Link</a> <br>
+### <a href="https://jonas-portfolio.notion.site/jonas-portfolio/Final-Spring-Boot-617e1c2a23544c6fa36d6e0a0079bedd">Notion Link</a> <br>
 ### 담당 : 장바구니(Cart), 구매(Order)
 <details>
   <summary>내용</summary>
@@ -57,6 +57,7 @@
 
 ## Document
 >#### ppt : 파일첨부
+>#### pdf : 파일첨부
   
 
   
