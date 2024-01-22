@@ -103,16 +103,10 @@ public class CartServiceImpl implements CartService{
 	//카트에 담긴 물건을 삭제하는 메서드, 삭제한 만큼 product 물량 증가
 	public void removeCart() {
 		prod = ProductServiceImpl.getInstance();
-//		boolean removeRun = true;
-//		while(removeRun) {
-//			try {
-//				for (Product p : carts) {
-//					System.out.println("상품코드 : "+p.getProId()+"  "+ p.getProName()+" : "+p.getProCnt()+"개, "+ p.getProPrice()+"원");
-//					
-//				} 	
+	
 				Product cartMem = findByCartMemberId(mem.getLoginUser().getUserId());
 				boolean containMem = carts.contains(cartMem);
-				if (containMem == false) {
+				if (!containMem) {
 					 System.err.println("장바구니에 상품이 없습니다");
 					 return;
 				}
@@ -121,6 +115,13 @@ public class CartServiceImpl implements CartService{
 					if (mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())) {
 						System.out.println("상품코드 : "+carts.get(i).getProId()+"  "+ carts.get(i).getProName()+" : "+carts.get(i).getProCnt()+"개, "+ carts.get(i).getProPrice()+"원");
 					}
+//					boolean removeRun = true;
+//					while(removeRun) {
+//						try {
+//							for (Product p : carts) {
+//								System.out.println("상품코드 : "+p.getProId()+"  "+ p.getProName()+" : "+p.getProCnt()+"개, "+ p.getProPrice()+"원");
+//								
+//							} 					
 //					else if (!mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())){
 //						System.err.println("장바구니에 상품이 없습니다");
 //						return;
@@ -135,7 +136,7 @@ public class CartServiceImpl implements CartService{
 							 System.err.println("장바구니에 해당 상품이 없습니다");
 							 return;
 						}
-						if (contain == false) {				 
+						if (!contain) {				 
 							 System.err.println("장바구니에 상품이 없습니다");
 							 return;
 						} 
@@ -166,16 +167,17 @@ public class CartServiceImpl implements CartService{
 
 	@Override
 	//현재 장바구니 내용조회 메서드
-	public void displayCart() {	
+	public void displayCart() {
+		Product cartMem = findByCartMemberId(mem.getLoginUser().getUserId());
+		boolean containMem = carts.contains(cartMem);
+		if (!containMem) {
+			 System.err.println("장바구니에 상품이 없습니다");
+			 return;
+		}
 		for(int i = 0; i < carts.size(); i++) {
 			if (mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())) {
 				System.out.println("상품코드 : "+carts.get(i).getProId()+"  "+ carts.get(i).getProName()+" : "+carts.get(i).getProCnt()+"개, "+ carts.get(i).getProPrice()+"원");
 			} 
-//			else if (!mem.getLoginUser().getUserId().equals(carts.get(i).getWriter())){
-//				System.err.println("장바구니에 상품이 없습니다");
-//				return;
-//			}
-			
 		}
 //		for (Product p : carts) {
 //			System.out.println("상품코드 : "+p.getProId()+"  "+ p.getProName()+" : "+p.getProCnt()+"개, "+ p.getProPrice()+"원");
