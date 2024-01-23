@@ -20,16 +20,17 @@
 
 ## 사용 예제
 
->테스트 계정 - ID : tj // PW : 306 
->             ID : police // PW : 112  
->             ID : center // PW : 93 
+>테스트 계정 - ID : tj // PW : 306
+              ID : police // PW : 112
+              ID : center // PW : 93 
               
 >관리자 계정 - ID : admin // PW :team5
 
-중고거래라는 컨셉을 활용하기 위해 회원가입시 주소명을 받고 있습니다.  
-화면ui가 아닌 콘솔에서 작동이기때문에 정확하게 주소명을 기입해야 카카오api가 작동한다는 단점이 있습니다.  
-카카오 api key를 지운상태입니다. 회원가입, 중고거래 게시판 기능을 사용하신다면 MemberServiceImpl 에서 getJSONData 메서드의 String auth에 키를 입력해야 합니다.  
-프로젝트는 git이 아닌 svn을 통해 진행하였으며, 프로젝트 종료 후 git으로 commit하였습니다. 
+- 중고거래라는 컨셉을 활용하기 위해 회원가입시 주소명을 받고 있습니다.  
+- 화면ui가 아닌 콘솔에서 작동이기때문에 정확하게 주소명을 기입해야 카카오api가 작동한다는 단점이 있습니다.  
+- 카카오 api key를 지운상태입니다. 
+  회원가입, 중고거래 게시판 기능을 사용하신다면 MemberServiceImpl 에서 getJSONData 메서드의 String auth에 키를 입력해야 합니다.  
+- 프로젝트는 git이 아닌 svn을 통해 진행하였으며, 프로젝트 종료 후 git으로 commit하였습니다. 
 
 ## 구현내용
 
