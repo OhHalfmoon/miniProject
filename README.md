@@ -59,6 +59,9 @@
 
 물품구매 및 구매내역 조회 :
 - 장바구니에 담긴 물품을 구매합니다.
+  
+물품구매 및 구매내역 조회 :
+- 장바구니에 담긴 물품을 구매합니다.
 - 장바구니에 회원이 추가한 모든 물품이 구매되며, 장바구니 물품 수정을 원하는 경우, "장바구니 삭제" 기능에서 수정이 가능합니다.  
             if (mem.equals(cartService.getCarts().get(i).getWriter())) {						
 						receipts.add(new Order(receipts.size()+1, mem, p.getProName(), p.getProId(), p.getProCnt(), p.getProPrice()));
