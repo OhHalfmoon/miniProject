@@ -21,8 +21,8 @@
 ## 사용 예제
 
 >테스트 계정 - ID : tj // PW : 306 
-              ID : police // PW : 112  
-              ID : center // PW : 93 
+>             ID : police // PW : 112  
+>             ID : center // PW : 93 
               
 >관리자 계정 - ID : admin // PW :team5
 
@@ -41,7 +41,7 @@
 
 장바구니(Carts) : 
 - 파일 영속화를 통해 회원이 담아둔 물품이 file로 유지되어 불러올 수 있습니다.
-- 상품코드를 입력받아 장바구니에 물품을 담을 수 있습ㄴ디ㅏ.
+- 상품코드를 입력받아 장바구니에 물품을 담을 수 있습니다.
 - 재고수량보다 많은 수량을 입력하거나, 장바구니에 담긴 총량이 재고수량을 초과하지 못하도록 설정하였습니다.
 - 장바구니에 담긴 물품을 확인할 수 있으며, 담긴 물품 삭제 구현했습니다.
 - carts.add(new Product(product.getProId(), product.getCategory(), product.getProName(), proCnt,cntPrice, mem.getLoginUser().getUserId()));
