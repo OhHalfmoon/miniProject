@@ -59,29 +59,22 @@
 
 물품구매 및 구매내역 조회 :
 - 장바구니에 담긴 물품을 구매합니다.
-  
-물품구매 및 구매내역 조회 :
-- 장바구니에 담긴 물품을 구매합니다.
 - 장바구니에 회원이 추가한 모든 물품이 구매되며, 장바구니 물품 수정을 원하는 경우, "장바구니 삭제" 기능에서 수정이 가능합니다.  
-            if (mem.equals(cartService.getCarts().get(i).getWriter())) {						
-						receipts.add(new Order(receipts.size()+1, mem, p.getProName(), p.getProId(), p.getProCnt(), p.getProPrice()));
-					}
-- 로그인한 회원과 장바구니에 담은 회원ID가 일치할 경우 구매가 이루어지며, receipt배열에 값이 추가됩니다.  
-- 추가되는 값은 결제번호, 구매자, 물품명, 물품번호, 구매물품수량, 물품가격 입니다.
-- 물품 구매후, carts 배열 초기화가 진행됩니다.    
-  
-				for(int i = 0; i < cartService.getCarts().size(); i++) {					
-					Product p = cartService.getCarts().get(i);					
-					if (Id.equals(cartService.getCarts().get(i).getWriter())) {						
-						cartService.getCarts().remove(i);
-					}
-				}  
-
-- clear(); 메서드를 처음에 활용해보았으나, 다른사람의 장바구니까지 삭제되는 문제가 발생하였습니다.
-- carts배열의 크기만큼 반복문을 실행하며, 이때 현재로그인한 회원의 ID값을 갖고있는 배열요소가 나오면 삭제하여 초기화 하는 방식으로 구현했습니다.  
+if (mem.equals(cartService.getCarts().get(i).getWriter())) {						
+		receipts.add(new Order(receipts.size()+1, mem, p.getProName(), p.getProId(), p.getProCnt(), p.getProPrice()));  
+}
+- 로그인한 회원과 장바구니에 물품을 담은 회원ID가 일치할 경우 구매가 이루어지며, receipt배열에 값이 추가됩니다.
+- 추가되는 값ㅇ느 결제번호, 구매자, 물품명, 물품번호, 구매물품수량, 물품가격 입니다.
+- 물품 구매후, carts 배열 초기화가 진행됩니다.  
+for(int i = 0; i < cartService.getCarts().size(); i++) {  
+	Product p = cartService.getCarts().get(i);  
+	if (Id.equals(cartService.getCarts().get(i).getWriter())) {  
+		cartService.getCarts().remove(i);  
+	}  
+}  
+- clear(); 메서드를 처음에 활용해보았으나, carts배열이 전부 초기화 되면서 다른사람의 장바구니까지 삭제되는 문제가 발생하였습니다.
+- carts배열의 크기만큼 반복문을 실행하며, 이때 현재로그인한 회원의 ID값을 갖고있는 배열요소가 나오면 삭제(remove(i))하여 초기화 하는 방식으로 이를 해결했습니다.
 - 구매내역조회에서 내가 구매했던 결제번호와 구매 물품 내역을 확인할 수 있습니다.
-
-
 
 
   </pre>
