@@ -20,11 +20,13 @@
 
 ## 사용 예제
 
->테스트 계정 - ID : tj // PW : 306
-              ID : police // PW : 112
-              ID : center // PW : 93 
+>테스트 계정 
+- ID : tj // PW : 306
+- ID : police // PW : 112
+- ID : center // PW : 93 
               
->관리자 계정 - ID : admin // PW :team5
+>관리자 계정 
+- ID : admin // PW :team5
 
 - 중고거래라는 컨셉을 활용하기 위해 회원가입시 주소명을 받고 있습니다.  
 - 화면ui가 아닌 콘솔에서 작동이기때문에 정확하게 주소명을 기입해야 카카오api가 작동한다는 단점이 있습니다.  
