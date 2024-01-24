@@ -38,7 +38,7 @@
 
 ## 구현내용
 
-### <a href="https://jonas-portfolio.notion.site/jonas-portfolio/Final-Spring-Boot-617e1c2a23544c6fa36d6e0a0079bedd">Notion Link</a> <br>
+### <a href="https://jonas-portfolio.notion.site/jonas-portfolio/Mini-Java-Eclipse-5f3fec9c0d3246f8a35d9f77b9cafa40">Notion Link</a> <br>
 ### 조원구성  
 - 팀장 이동건 : 중고거래, MAIN 메서드 정리
 - 팀원 고은채 : 고객 등록 및 관리 구현, 관리자 계정 구현
